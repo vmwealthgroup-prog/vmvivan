@@ -1,0 +1,484 @@
+import { o as __toESM } from "../_runtime.mjs";
+import { i as saveSiteSetting, r as reviewAccessRequest, s as updateAdminMessage, t as getAdminOverview } from "./admin.functions-Bps96anw.mjs";
+import { r as signOut } from "./client-IEBeEnMX.mjs";
+import { Ht as require_react, b as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+// node_modules/.nitro/vite/services/ssr/assets/admin-HBpxztIx.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
+function AdminPage() {
+	const [data, setData] = (0, import_react.useState)(null);
+	const [error, setError] = (0, import_react.useState)("");
+	const [signOutError, setSignOutError] = (0, import_react.useState)("");
+	const [busy, setBusy] = (0, import_react.useState)(false);
+	const [signingOut, setSigningOut] = (0, import_react.useState)(false);
+	const [tab, setTab] = (0, import_react.useState)("requests");
+	const [settingKey, setSettingKey] = (0, import_react.useState)("announcement");
+	const [settingValue, setSettingValue] = (0, import_react.useState)("");
+	const refresh = (0, import_react.useCallback)(async () => {
+		setBusy(true);
+		setError("");
+		try {
+			const result = await getAdminOverview();
+			setData(result);
+		} catch (e) {
+			setData(null);
+			setError(e instanceof Error ? e.message : "Unable to load admin data.");
+		} finally {
+			setBusy(false);
+		}
+	}, []);
+	(0, import_react.useEffect)(() => {
+		refresh();
+	}, [refresh]);
+	async function act(fn) {
+		setBusy(true);
+		setError("");
+		try {
+			await fn();
+			await refresh();
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "Action failed.");
+		} finally {
+			setBusy(false);
+		}
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+		className: "min-h-screen bg-bg px-4 py-8 text-fg sm:px-8",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-7xl",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				className: "flex flex-wrap items-center justify-between gap-4 border-b border-line pb-6",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs uppercase tracking-[.25em] text-primary",
+						children: "VMVIRA CONTROL ROOM"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						className: "mt-2 font-display text-4xl",
+						children: "Admin console"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-sm text-muted",
+						children: data?.admin.email ?? (error ? "Admin access required" : "Checking administrator session…")
+					})
+				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex gap-2",
+					children: [
+						data?.admin.email && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							disabled: signingOut,
+							onClick: () => {
+								setSignOutError("");
+								setSigningOut(true);
+								signOut().catch((cause) => {
+									setSignOutError(cause instanceof Error ? cause.message : "Sign-out failed.");
+									setSigningOut(false);
+								});
+							},
+							className: "border border-line px-4 py-2 text-sm disabled:cursor-wait disabled:opacity-60",
+							children: signingOut ? "Signing out…" : "Sign out"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+							href: "/",
+							className: "border border-line px-4 py-2 text-sm",
+							children: "View website"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => void refresh(),
+							className: "bg-primary px-4 py-2 text-sm font-medium text-primary-fg",
+							children: "Refresh"
+						})
+					]
+				})]
+			}), !data ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+				className: "my-8 border border-line bg-surface p-6",
+				children: error ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					role: "alert",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "font-display text-2xl",
+							children: "Admin access required"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-2 text-sm",
+							children: error
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-1 text-sm text-muted",
+							children: "Sign in with an email listed in VMVIRA_ADMIN_EMAILS."
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+							href: "/login",
+							className: "mt-4 inline-block bg-primary px-4 py-2 text-sm font-medium text-primary-fg",
+							children: "Sign in with Google"
+						})
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					role: "status",
+					className: "text-sm text-muted",
+					children: "Checking administrator session…"
+				})
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				signOutError && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					role: "alert",
+					className: "mt-4 border border-red-500/40 bg-red-500/10 p-4 text-sm",
+					children: signOutError
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "my-6 grid gap-3 sm:grid-cols-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Metric, {
+							label: "Pending approvals",
+							value: data?.counts.pending ?? "—"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Metric, {
+							label: "Unread messages",
+							value: data?.counts.unread ?? "—"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Metric, {
+							label: "Approved access",
+							value: data?.counts.approved ?? "—"
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+					className: "mb-6 flex flex-wrap gap-2",
+					"aria-label": "Admin sections",
+					children: [
+						["requests", "Approvals"],
+						["messages", "Email & messages"],
+						["chats", "AI chat transcripts"],
+						["website", "Website controls"],
+						["audit", "Audit log"]
+					].map(([id, label]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						onClick: () => setTab(id),
+						className: `border px-4 py-3 text-sm ${tab === id ? "border-primary bg-primary text-primary-fg" : "border-line text-muted"}`,
+						children: label
+					}, id))
+				}),
+				busy && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mb-3 text-xs text-muted",
+					children: "Updating…"
+				}),
+				tab === "requests" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Panel, {
+					title: "Access approval queue",
+					subtitle: "Review website access requests. Decisions are stored in the database.",
+					children: !data?.requests.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Empty, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "overflow-x-auto",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+							className: "w-full text-left text-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+								className: "border-b border-line text-muted",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Email"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Book"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Status"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Received"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Action"
+									})
+								]
+							}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: data.requests.map((r) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+								className: "border-b border-line",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: r.email
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: r.book
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: r.status
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: new Date(r.created_at).toLocaleString()
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												disabled: busy || r.status === "approved",
+												onClick: () => void act(() => reviewAccessRequest({ data: {
+													id: r.id,
+													status: "approved"
+												} })),
+												className: "border border-primary px-3 py-2 text-primary",
+												children: "Approve"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												disabled: busy || r.status === "rejected",
+												onClick: () => void act(() => reviewAccessRequest({ data: {
+													id: r.id,
+													status: "rejected"
+												} })),
+												className: "border border-line px-3 py-2",
+												children: "Reject"
+											})]
+										})
+									})
+								]
+							}, r.id)) })]
+						})
+					})
+				}),
+				tab === "messages" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Panel, {
+					title: "Email & message inbox",
+					subtitle: "Website enquiries are saved here. This is not an external mailbox sync or outbound mail service.",
+					children: !data?.messages.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Empty, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-3",
+						children: data.messages.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+							className: "border border-line bg-surface p-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-wrap justify-between gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-medium",
+										children: m.subject
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "text-sm text-muted",
+										children: [
+											m.sender_name,
+											" · ",
+											m.sender_email
+										]
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs uppercase text-primary",
+										children: m.status
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "my-3 whitespace-pre-wrap text-sm",
+									children: m.body
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs text-muted",
+									children: new Date(m.created_at).toLocaleString()
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									className: "mt-3 block text-xs text-muted",
+									children: ["Admin note", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										defaultValue: m.admin_note,
+										id: `note-${m.id}`,
+										className: "mt-1 min-h-10 w-full border border-line bg-bg px-3 text-sm text-fg"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "mt-3 flex flex-wrap gap-2",
+									children: [
+										"unread",
+										"read",
+										"archived"
+									].map((status) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										disabled: busy,
+										onClick: () => {
+											const note = document.getElementById(`note-${m.id}`)?.value ?? "";
+											act(() => updateAdminMessage({ data: {
+												id: m.id,
+												status,
+												note
+											} }));
+										},
+										className: "border border-line px-3 py-2 text-xs",
+										children: ["Mark ", status]
+									}, status))
+								})
+							]
+						}, m.id))
+					})
+				}),
+				tab === "chats" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Panel, {
+					title: "Customer-care AI conversations",
+					subtitle: "Visitor chat transcripts stored in the database. Only allowlisted administrators can view this section.",
+					children: !data?.chats.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Empty, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-3",
+						children: data.chats.map((chat) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+							className: "border border-line bg-surface p-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-wrap justify-between gap-2 text-xs text-muted",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Conversation ", chat.conversation_id] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									chat.message_count,
+									" messages · ",
+									new Date(chat.last_message_at).toLocaleString()
+								] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", {
+								className: "mt-3 whitespace-pre-wrap break-words font-sans text-sm",
+								children: chat.transcript
+							})]
+						}, chat.conversation_id))
+					})
+				}),
+				tab === "website" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Panel, {
+					title: "Website settings",
+					subtitle: "Store controlled content values for future public-site components. Values are saved server-side; this export does not yet wire every homepage section to these settings.",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid gap-3 md:grid-cols-[220px_1fr]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "text-sm text-muted",
+								children: ["Setting key", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									value: settingKey,
+									onChange: (e) => setSettingKey(e.target.value),
+									className: "mt-1 min-h-11 w-full border border-line bg-bg px-3 text-fg"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "text-sm text-muted",
+								children: ["Setting value", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+									value: settingValue,
+									onChange: (e) => setSettingValue(e.target.value),
+									rows: 5,
+									className: "mt-1 w-full border border-line bg-bg p-3 text-fg"
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							disabled: busy || !settingKey.trim(),
+							onClick: () => void act(() => saveSiteSetting({ data: {
+								key: settingKey.trim(),
+								value: settingValue
+							} })),
+							className: "mt-3 bg-primary px-5 py-3 text-sm font-medium text-primary-fg",
+							children: "Save setting"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "mt-8 mb-3 font-medium",
+							children: "Stored settings"
+						}),
+						!data?.settings.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Empty, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "space-y-2",
+							children: data.settings.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => {
+									setSettingKey(s.setting_key);
+									setSettingValue(s.setting_value);
+								},
+								className: "flex w-full justify-between gap-4 border border-line p-3 text-left text-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: s.setting_key }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "max-w-[65%] truncate text-muted",
+									children: s.setting_value
+								})]
+							}, s.setting_key))
+						})
+					]
+				}),
+				tab === "audit" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Panel, {
+					title: "Admin audit history",
+					subtitle: "Records of approval and control actions.",
+					children: !data?.logs.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Empty, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "overflow-x-auto",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+							className: "w-full text-left text-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+								className: "border-b border-line text-muted",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Time"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Admin"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Action"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Target"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+										className: "p-3",
+										children: "Details"
+									})
+								]
+							}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: data.logs.map((l) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+								className: "border-b border-line",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: new Date(l.created_at).toLocaleString()
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: l.admin_email
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: l.action
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+										className: "p-3",
+										children: [
+											l.target_type,
+											" / ",
+											l.target_id
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+										className: "p-3",
+										children: l.details
+									})
+								]
+							}, l.id)) })]
+						})
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
+					className: "mt-8 border-t border-line pt-4 text-xs text-muted",
+					children: "Protected admin APIs · server-side email allowlist · database-backed records · audit trail"
+				})
+			] })]
+		})
+	});
+}
+function Metric({ label, value }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "border border-line bg-surface p-5",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-xs uppercase tracking-widest text-muted",
+			children: label
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-2 font-display text-4xl",
+			children: value
+		})]
+	});
+}
+function Panel({ title, subtitle, children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "border border-line bg-surface p-5 sm:p-7",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "font-display text-2xl",
+				children: title
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mb-5 mt-1 text-sm text-muted",
+				children: subtitle
+			}),
+			children
+		]
+	});
+}
+function Empty() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "border border-dashed border-line p-8 text-center text-sm text-muted",
+		children: "No records yet."
+	});
+}
+export { AdminPage as component };

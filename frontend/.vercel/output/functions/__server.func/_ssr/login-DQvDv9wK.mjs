@@ -1,0 +1,125 @@
+import { o as __toESM } from "../_runtime.mjs";
+import { n as signIn, t as authClient } from "./client-IEBeEnMX.mjs";
+import { t as GOOGLE_PROVIDER } from "./providers-BuILhmtR.mjs";
+import { Ht as require_react, b as require_jsx_runtime, v as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+// node_modules/.nitro/vite/services/ssr/assets/login-DQvDv9wK.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
+/**
+* Current user + loading state. Same behavior in live preview and when deployed:
+*   - Auth enabled -> the real signed-in user; `user` is `null` while
+*                            the session resolves (`isPending: true`) and when
+*                            signed out (`isPending: false`). Session comes from
+*                            Better Auth `useSession()` → `/api/auth/get-session`
+*                            (cookie when deployed; bearer in live preview).
+*   - Auth disabled (`VITE_AUTH_ENABLED=false`) -> `DEV_USER`, never pending.
+*
+* Protect a route by waiting out `isPending` before acting on `user` —
+* redirecting on `user: null` alone bounces signed-in visitors to sign-in on
+* every hard reload:
+*
+*   import { RedirectToSignIn } from "@/lib/auth/gates";
+*   const { user, isPending } = useCurrentUserState();
+*   if (isPending) return null;              // still resolving — don't redirect yet
+*   if (!user) return <RedirectToSignIn />;  // definitely signed out
+*
+* `authEnabled` is a module-level constant fixed at load, so the guarded hook
+* call keeps a stable hook order across every render of a given component.
+*/
+function useCurrentUserState() {
+	return useSessionUserState();
+}
+function useSessionUserState() {
+	const { data, isPending } = authClient.useSession();
+	const id = data?.user.id;
+	const displayName = data?.user.name ?? null;
+	const primaryEmail = data?.user.email ?? null;
+	const profileImageUrl = data?.user.image ?? null;
+	const user = (0, import_react.useMemo)(() => id ? {
+		id,
+		displayName,
+		primaryEmail,
+		profileImageUrl,
+		isDevFallback: false
+	} : null, [
+		id,
+		displayName,
+		primaryEmail,
+		profileImageUrl
+	]);
+	return (0, import_react.useMemo)(() => ({
+		user,
+		isPending
+	}), [user, isPending]);
+}
+function SignInButtons({ callbackURL = "/" }) {
+	const [error, setError] = (0, import_react.useState)("");
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex w-full max-w-sm flex-col gap-2",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			onClick: () => {
+				setError("");
+				signIn(GOOGLE_PROVIDER.id, { callbackURL }).catch((cause) => {
+					setError(cause instanceof Error ? cause.message : "Sign-in failed. Please try again.");
+				});
+			},
+			className: "w-full cursor-pointer rounded-md border border-neutral-300 px-4 py-2 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900",
+			children: ["Continue with ", GOOGLE_PROVIDER.label]
+		}), error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			role: "alert",
+			className: "text-sm text-red-600",
+			children: error
+		})]
+	});
+}
+function LoginPage() {
+	const { user, isPending } = useCurrentUserState();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+		className: "grid min-h-screen place-items-center bg-bg px-4 py-12 text-fg",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+			className: "w-full max-w-lg border border-line bg-surface p-6 sm:p-8",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs uppercase tracking-[.25em] text-primary",
+					children: "VMVIRA CONTROL ROOM"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "mt-3 font-display text-4xl",
+					children: "Administrator sign-in"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-3 text-sm text-muted",
+					children: "Sign in with Google using an email on the server-side admin allowlist."
+				}),
+				isPending ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-6 text-sm text-muted",
+					children: "Checking your session…"
+				}) : user ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-6 space-y-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-sm",
+						children: [
+							"Signed in as ",
+							user.primaryEmail ?? user.displayName ?? "your account",
+							"."
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						to: "/admin",
+						className: "inline-flex min-h-11 items-center bg-primary px-4 text-sm font-medium text-primary-fg",
+						children: "Continue to admin"
+					})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SignInButtons, { callbackURL: "/admin" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					to: "/",
+					className: "mt-8 inline-block text-sm text-muted underline underline-offset-4",
+					children: "Back to website"
+				})
+			]
+		})
+	});
+}
+export { LoginPage as component };

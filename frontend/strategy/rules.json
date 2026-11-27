@@ -1,0 +1,73 @@
+{
+  "id": "ema-20-200-vwap-sl",
+  "name": "20/200 EMA cross with VWAP stop",
+  "engine": "python",
+  "version": "1.0.0",
+  "timeframe": "5m",
+  "session": {
+    "exchange": "NSE",
+    "open": "09:15",
+    "close": "15:30",
+    "bar_minutes": 5
+  },
+  "indicators": {
+    "fast_ema": { "period": 20, "source": "close" },
+    "slow_ema": { "period": 200, "source": "close" },
+    "vwap": { "price": "typical", "reset": "session" }
+  },
+  "automation": {
+    "mode": "fully_automatic",
+    "confirm": "bar_close",
+    "lookahead": false,
+    "holding": "intraday",
+    "flat_at": "15:25"
+  },
+  "entries": {
+    "buy": {
+      "when": "fast_ema crosses above slow_ema",
+      "filter": "close > vwap, and not in the first or last 30 minutes",
+      "action": "buy"
+    },
+    "sell": {
+      "when": "fast_ema crosses below slow_ema",
+      "filter": "close < vwap, and not in the first or last 30 minutes",
+      "action": "sell"
+    }
+  },
+  "exits": {
+    "on_opposite_cross": true,
+    "session_flat": "last 5-minute bar of the NSE session",
+    "stop": {
+      "type": "vwap",
+      "long": "close crosses below session VWAP",
+      "short": "close crosses above session VWAP",
+      "armed": "after the entry bar; ignored for the first 30 minutes"
+    }
+  },
+  "markets": [
+    {
+      "id": "NIFTY50",
+      "label": "Nifty 50",
+      "kind": "index",
+      "allow_short": true
+    },
+    {
+      "id": "BANKNIFTY",
+      "label": "Bank Nifty",
+      "kind": "index",
+      "allow_short": true
+    },
+    {
+      "id": "RELIANCE",
+      "label": "Reliance",
+      "kind": "stock",
+      "allow_short": true
+    },
+    {
+      "id": "HDFCBANK",
+      "label": "HDFC Bank",
+      "kind": "stock",
+      "allow_short": true
+    }
+  ]
+}
