@@ -17,7 +17,7 @@ const buyBar = buy ? nifty.bars.find((bar) => bar.i === buy.bar) : undefined;
 const features = [
   {
     icon: Workflow,
-    title: "Fully automatic",
+    title: "Fully Automatic Treding",
     body: "A finished bar is the only trigger. There is no confirm button and no discretionary override in the file.",
   },
   {
